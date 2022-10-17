@@ -1,5 +1,10 @@
 function loadPost(title) {
-    document.querySelector('article').innerHTML = get_post(title);
+    document.querySelector('article').innerHTML = getPost(title);
+}
+
+function onPostLoad() {
+    console.log("Loaded!");
+    document.querySelector('article').innerHTML = this.responseText;
 }
 
 function main() {
@@ -7,20 +12,15 @@ function main() {
 
     for(let i = 0; i < postButtons.length; ++i) {
         let button = postButtons[i];
-        button.addEventListener("click", () => { loadPost(button.dataset.fname); });
+        button.addEventListener("click", () => { getPost(button.dataset.fname); });
     };
 }
 
-function get_post(title) {
-            let xhr= new XMLHttpRequest();
-            xhr.open('GET', 'https://raw.githubusercontent.com/thejovialknight/portfolio/main/' + title + '.html', true);
-            xhr.onreadystatechange= function() {
-            if (this.readyState!==4) return;
-            if (this.status!==200) return; // or whatever error handling you want
-                return this.responseText;
-            };
-            xhr.send();
-    }
+function getPost(title) {
+    let request = new XMLHttpRequest();
+    request.addEventListener("load", onPostLoad);
+    request.open("GET", "https://raw.githubusercontent.com/thejovialknight/portfolio/main/" + title + ".html");
+    request.send();
 }
 
 function get_post1(title) {
