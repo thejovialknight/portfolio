@@ -12,6 +12,18 @@ function main() {
 }
 
 function get_post(title) {
+            let xhr= new XMLHttpRequest();
+            xhr.open('GET', 'https://raw.githubusercontent.com/thejovialknight/portfolio/main/' + title + '.html', true);
+            xhr.onreadystatechange= function() {
+            if (this.readyState!==4) return;
+            if (this.status!==200) return; // or whatever error handling you want
+                return this.responseText;
+            };
+            xhr.send();
+    }
+}
+
+function get_post1(title) {
     switch(title) {
         case "first-post" :
             return "<h1>How I learned to stop swimming, and love the nuclear bomb</h1><p>Lorem ipsum dolor <e>sit amet</e>, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><h2>Moving On</h2><p>Egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate. Pretium aenean pharetra magna ac placerat vestibulum lectus. Et leo duis ut diam quam nulla porttitor massa id. Ultricies integer quis auctor elit sed vulputate mi sit. Convallis posuere morbi leo urna molestie at elementum eu facilisis. Vestibulum morbi blandit cursus risus at ultrices mi. Netus et malesuada fames ac turpis egestas. Tristique et egestas quis ipsum suspendisse ultrices gravida. Ac tincidunt vitae semper quis lectus nulla at. Molestie a iaculis at erat pellentesque adipiscing commodo. Ac placerat vestibulum lectus mauris ultrices eros in cursus. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet.</p><p>Elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi. Elit eget gravida cum sociis. Etiam tempor orci eu lobortis. Dolor sit amet consectetur adipiscing elit duis. Lorem ipsum dolor sit amet consectetur. Integer malesuada nunc vel risus commodo viverra. Elementum tempus egestas sed sed risus pretium. Aliquam ut porttitor leo a diam sollicitudin. Ac turpis egestas integer eget aliquet nibh praesent tristique. Ullamcorper eget nulla facilisi etiam dignissim diam.</p>";
