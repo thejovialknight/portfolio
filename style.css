@@ -111,14 +111,24 @@ article {
 article h2 {
 }
 
-blockquote {
+article blockquote {
     padding-left: 2.5ch;
     margin-left: 1.5ch;
     margin-right: 0;
     border-left: 1px solid lightgrey;
+    font-size: 0.75rem;
 }
 
-blockquote h2 {
+article blockquote p {
+    text-indent: 0;
+    margin-bottom: 1rem;
+}
+
+article blockquote p::before {
+    width: 0;
+}
+
+article blockquote h2 {
     font-size: 1rem;
 }
 
@@ -139,8 +149,20 @@ article p::before {
     transform: translate(-4ch, 1rem);
 }
 
-article e {
+article e, article a {
     background-color: black;
     color: white;
     padding: 2px 5px;
+}
+
+article a {
+    text-decoration: none;
+    background-color: CornflowerBlue;
+    transition: all 0.1s;
+}
+
+article a:hover {
+    border-bottom: 0.2rem solid CornflowerBlue;
+    color: CornflowerBlue;
+    background-color: white;
 }
