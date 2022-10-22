@@ -3,11 +3,11 @@ function onPostButtonClick(title) {
     //const headerPrefix = "conner's | ";
     //header.innerHTML = headerPrefix + title;
     
-    // Removed on page load to achieve fade in effect
-    article.classList.add("invisible");
+    // Move post button container
+    postButtonContainer.classList.remove('initial');
     
     // Set post buttons to be on or off
-    const selectedClassName = "selected";
+    const selectedClassName = 'selected';
     for(let i = 0; i < postButtons.length; ++i) {
         let button = postButtons[i];
         if(button.dataset.fname === title) {
@@ -40,6 +40,7 @@ function main() {
 
 const header = document.querySelector('header h1');
 const article = document.querySelector('article');
+const postButtonContainer = document.querySelector('aside');
 const postButtons = document.querySelectorAll('li');
 
 main();
