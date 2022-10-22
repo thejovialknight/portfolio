@@ -1,4 +1,7 @@
 function onPostButtonClick(title) {
+    // Set back to 1.0 on page load to achieve fade in effect
+    article.style.opacity = 0.0;
+    
     // Set post buttons to be on or off
     const selectedClassName = "selected";
     for(let i = 0; i < postButtons.length; ++i) {
@@ -20,9 +23,8 @@ function onPostButtonClick(title) {
 
 function onPostLoad() {
     console.log("Loaded!");
-    let article = document.querySelector('article')
     article.innerHTML = this.responseText;
-    article.style.opacity = 0.0;
+    article.style.opacity = 1.0;
 }
 
 function main() {
@@ -32,6 +34,7 @@ function main() {
     };
 }
 
+const article = document.querySelector('article');
 const postButtons = document.querySelectorAll('li');
 
 main();
