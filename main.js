@@ -3,8 +3,8 @@ function onPostButtonClick(title) {
     //const headerPrefix = "conner's | ";
     //header.innerHTML = headerPrefix + title;
     
-    // Set back to 1.0 on page load to achieve fade in effect
-    article.style.opacity = 0.0;
+    // Removed on page load to achieve fade in effect
+    article.classList.add("invisible");
     
     // Set post buttons to be on or off
     const selectedClassName = "selected";
@@ -28,7 +28,7 @@ function onPostButtonClick(title) {
 function onPostLoad() {
     console.log("Loaded!");
     article.innerHTML = this.responseText;
-    article.removeAttribute('style');
+    article.classList.remove('invisible');
 }
 
 function main() {
