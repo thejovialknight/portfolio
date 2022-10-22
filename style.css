@@ -65,12 +65,12 @@ header h6 {
 }
 
 aside.initial {
-    grid-column: 1/5;
-    place-self: center;
+    transform: translate(16ch, 0);
     box-shadow: none;
 }
 
 aside {
+    transition: all 2s;
     grid-row: 2;
     grid-column: 2;
     place-self: start;
@@ -117,7 +117,7 @@ article {
     grid-column: 3;
     padding: 1rem 2rem;
     opacity: 1.0;
-    transition: all 1s;
+    transition: all 2s;
 }
 
 article h1 {
