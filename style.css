@@ -48,9 +48,9 @@ header {
 
 header h1 {
     text-align: center;
-    font-family: "Helvetica", sans-serif;
-    text-transform: uppercase;
-    font-weight: 1000;
+    font-family: "Playfair", sans-serif;
+    text-transform: lowercase;
+    font-weight: 500;
     padding: 0;
     margin: 0;
 }
@@ -136,7 +136,7 @@ article p::before {
 article p {
     text-indent: 0;
     margin-bottom: 1rem;
-    text-align: justify;
+    text-align: left;
     padding: 0;
     line-height: 1.7rem;
 }
