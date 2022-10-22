@@ -1,7 +1,7 @@
 function onPostButtonClick(title) {
     // Set header to display article title
-    const headerPrefix = "conner's | ";
-    header.innerHTML = headerPrefix + title;
+    //const headerPrefix = "conner's | ";
+    //header.innerHTML = headerPrefix + title;
     
     // Set back to 1.0 on page load to achieve fade in effect
     article.style.opacity = 0.0;
@@ -28,7 +28,7 @@ function onPostButtonClick(title) {
 function onPostLoad() {
     console.log("Loaded!");
     article.innerHTML = this.responseText;
-    article.style.opacity = 1.0;
+    article.removeAttribute('style');
 }
 
 function main() {
