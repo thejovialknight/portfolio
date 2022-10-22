@@ -1,4 +1,8 @@
 function onPostButtonClick(title) {
+    // Set header to display article title
+    const headerPrefix = "conner's | ";
+    header.innerHTML = headerPrefix + title;
+    
     // Set back to 1.0 on page load to achieve fade in effect
     article.style.opacity = 0.0;
     
@@ -34,6 +38,7 @@ function main() {
     };
 }
 
+const header = document.querySelector('header h1');
 const article = document.querySelector('article');
 const postButtons = document.querySelectorAll('li');
 
