@@ -91,7 +91,7 @@ aside li {
     transition: all 0.5s;
 }
 
-aside li:hover {
+aside li:hover, aside li.selected {
     transform: translate(-2ch, 0ch);
     background-color: black;
     color: white;
