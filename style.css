@@ -103,6 +103,7 @@ aside a {
 
 article.invisible {
     opacity: 0.0;
+    transform: translate(40ch, 0px);
 }
 
 article {
@@ -110,7 +111,7 @@ article {
     grid-column: 3;
     padding: 1rem 2rem;
     opacity: 1.0;
-    animation: all 1s;
+    transition: all 1s;
 }
 
 article h1 {
