@@ -101,6 +101,10 @@ aside a {
     text-align: right;
 }
 
+article.invisible {
+    opacity: 0.0;
+}
+
 article {
     grid-row: 2;
     grid-column: 3;
