@@ -70,7 +70,7 @@ aside.initial {
 }
 
 aside {
-    transition: all 2s;
+    transition: all 1.2s;
     grid-row: 2;
     grid-column: 2;
     place-self: start;
@@ -118,7 +118,7 @@ article {
     padding: 1rem 2rem;
     padding-left: 0;
     opacity: 1.0;
-    transition: all 2s;
+    transition: all 1.2s;
 }
 
 article h1 {
