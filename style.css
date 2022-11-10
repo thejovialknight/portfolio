@@ -171,12 +171,12 @@ article e, article a {
 
 article a {
     text-decoration: none;
-    background-color: CornflowerBlue;
-    transition: all 0.1s;
+    background-color: black;
+    transition: all 0.2s;
 }
 
 article a:hover {
     border-bottom: 0.2rem solid CornflowerBlue;
-    color: CornflowerBlue;
+    color: black;
     background-color: white;
 }
