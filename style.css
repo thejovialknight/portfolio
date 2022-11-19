@@ -141,6 +141,14 @@ article blockquote {
     font-size: 1rem;
 }
 
+article ol {
+    padding-left: 4ch;
+    margin-left: 1.5ch;
+    margin-right: 0;
+    border-left: 1px solid lightgrey;
+    font-size: 1rem;
+}
+
 article p::before {
     width: 0;
 }
