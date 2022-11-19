@@ -129,13 +129,15 @@ article h1 {
     font-size: 6rem;
 }
 
-article h2 {
-
+article em {
+    font-weight: Bold;
+    font-style: normal;
+    font-family: Playfair-Italic;
 }
 
 article blockquote {
     padding-left: 2.5ch;
-    margin-left: 1.5ch;
+    margin-left: 2.5ch;
     margin-right: 0;
     border-left: 1px solid lightgrey;
     font-size: 1rem;
@@ -143,7 +145,7 @@ article blockquote {
 
 article ol {
     padding-left: 4ch;
-    margin-left: 1.5ch;
+    margin-left: 2.5ch;
     margin-right: 0;
     border-left: 1px solid lightgrey;
     font-size: 1rem;
@@ -153,6 +155,9 @@ article p::before {
     width: 0;
 }
 
+article p, article ol, article ul {
+    line-height: 1.7rem;
+}
 
 article p {
     text-indent: 0;
@@ -160,6 +165,14 @@ article p {
     text-align: left;
     padding: 0;
     line-height: 1.7rem;
+}
+
+article hr {
+    height: 1px;
+    margin-left: 2.5ch;
+    margin-right: 2.5ch;
+    background-color: lightgrey;
+    border: none;
 }
 
 .clazz article p::before {
@@ -187,4 +200,14 @@ article a:hover {
     border-bottom: 0.2rem solid CornflowerBlue;
     color: black;
     background-color: white;
+}
+
+.post-script {
+    font-family: Playfair-Italic;
+    color: lightgrey;
+}
+
+.date-script {
+    font-weight: Bold;
+    font-size: 0.5rem;
 }
