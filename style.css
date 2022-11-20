@@ -130,7 +130,6 @@ article h1 {
 }
 
 article em {
-    font-weight: Bold;
     font-style: normal;
     font-family: Playfair-Italic;
 }
@@ -175,6 +174,18 @@ article hr {
     border: none;
 }
 
+/*
+article .note {
+    transform: translate(0px, 0.5);
+    vertical-align: super;
+    text-align: center;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    font-size: 0.5rem;
+}
+*/
+
 .clazz article p::before {
     content: "";
     width: 3ch;
@@ -204,10 +215,12 @@ article a:hover {
 
 .post-script {
     font-family: Playfair-Italic;
-    color: lightgrey;
+    font-size: 0.75rem;
+    margin 1rem 0rem;
 }
 
 .date-script {
-    font-weight: Bold;
-    font-size: 0.5rem;
+    font-size: 0.75rem;
+    color: lightgrey;
+    text-align: right;
 }
