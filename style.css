@@ -12,6 +12,21 @@
     font-family: "Playfair", sans-serif;
     font-size: 24px;
     --shadow: rgba(0, 0, 0, 1.0);
+    --foreground: black;
+    --background: white;
+    --middle: lightgrey;
+    --link-accent: #1565C0;
+    --note-accent: #B71C1C;
+    color: var(--foreground);
+    background-color: var(--background);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --foreground: white;
+        --background: black;
+        --middle: darkgrey;
+    }
 }
 
 @media (max-width: 1280px) {
@@ -41,7 +56,7 @@ header {
     grid-row: 1;
     grid-column: 1 / 5;
     /* box-shadow: 0rem 1rem 1rem -1.5rem var(--shadow); */
-    border-bottom: 1px solid lightgrey;
+    border-bottom: 1px solid var(--middle);
     align-self: center;
     padding: 1rem;
 }
@@ -99,8 +114,8 @@ aside li {
 
 aside li:hover, aside li.selected {
     transform: translate(-2ch, 0ch);
-    background-color: black;
-    color: white;
+    background-color: var(--foreground);
+    color: var(--background);
 }
 
 aside a {
@@ -138,7 +153,7 @@ article blockquote {
     padding-left: 2.5ch;
     margin-left: 2.5ch;
     margin-right: 0;
-    border-left: 1px solid lightgrey;
+    border-left: 1px solid var(--middle);
     font-size: 1rem;
 }
 
@@ -146,7 +161,7 @@ article ol {
     padding-left: 4ch;
     margin-left: 2.5ch;
     margin-right: 0;
-    border-left: 1px solid lightgrey;
+    border-left: 1px solid var(--middle);
     font-size: 1rem;
 }
 
@@ -170,47 +185,101 @@ article hr {
     height: 1px;
     margin-left: 2.5ch;
     margin-right: 2.5ch;
-    background-color: lightgrey;
+    background-color: var(--middle);
     border: none;
 }
 
-/*
 article .note {
-    transform: translate(0px, 0.5);
-    vertical-align: super;
-    text-align: center;
+    user-select: none;
+    font-weight: bold;
+    color: var(--background);
+    background-color: var(--foreground);
+    width: 0.6rem;
+    height: 0.6rem;
     border-radius: 50%;
-    background-color: black;
-    color: white;
+    display: inline-block;
     font-size: 0.5rem;
+    text-align: center;
+    vertical-align: super;
+    line-height: 0.5rem;
+    transition: all 0.2s;
 }
-*/
+
+article .note:hover {
+    color: var(--background);
+    background-color: var(--note-accent);
+    transform: translate(0, -0.1rem);
+}
+
+article .note.clicked-note {
+    transform: translate(0px, -0.2rem);
+    background-color: transparent;
+    color: var(--note-accent);
+}
+
+article .note-text {
+    color:var(--note-accent);
+    font-style: italic;
+    display: block;
+    animation-name: note-appear;
+    animation-duration: 5s;
+}
+
+article .note-index{
+    color: var(--note-accent);
+    vertical-align: super;
+    font-weight: bold;
+    font-size: 0.75rem;
+    animation-name: note-appear;
+    animation-duration: 5s;
+    animation-timing-function: ease-in;
+}
+
+@keyframes note-appear {
+    from {
+        color: transparent;
+        max-height: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+    50% {
+        color: var(--note-accent);
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+    }
+    to {
+        color: var(--note-accent);
+        max-height: 15rem;
+    }
+}
 
 .clazz article p::before {
     content: "";
     width: 3ch;
     height: 1px;
-    background-color: lightgrey;
+    background-color: var(--middle);
     position: absolute;
     transform: translate(-4ch, 1rem);
 }
 
 article e, article a {
-    background-color: black;
-    color: white;
+    background-color: var(--foreground);
+    color: var(--background);
     padding: 2px 5px;
 }
 
 article a {
     text-decoration: none;
-    background-color: black;
+    background-color: var(--foreground);
     transition: all 0.2s;
 }
 
 article a:hover {
-    border-bottom: 0.2rem solid CornflowerBlue;
-    color: black;
-    background-color: white;
+    border-bottom: 0.2rem solid var(--link-accent);
+    color: var(--foreground);
+    background-color: var(--background);
 }
 
 .post-script {
@@ -221,6 +290,6 @@ article a:hover {
 
 .date-script {
     font-size: 0.75rem;
-    color: lightgrey;
+    color: var(--middle);
     text-align: right;
 }

@@ -25,8 +25,23 @@ function onPostButtonClick(title) {
     request.send();
 }
 
-function onNoteButtonClick(text, button) {
-    
+function onNoteButtonClick(text, button, index) {
+    if(clickedNoteIndices.includes(index)) {
+        return;
+    }
+    else {
+        clickedNoteIndices.push(index);
+    }
+
+    const noteElement = document.createElement("p");
+    noteElement.innerHTML = "<span class='note-index'>" + index + "</span> " + text;
+
+    noteElement.classList.add("note-text");
+    paragraph = button.parentElement;
+    paragraph.style.marginBottom = "0px";
+    paragraphParent = paragraph.parentElement;
+    paragraphParent.insertBefore(noteElement, paragraph.nextSibling);
+    button.classList.add("clicked-note");
 }
 
 function onPostLoad() {
@@ -37,9 +52,11 @@ function onPostLoad() {
     for(let i = 0; i < noteButtons.length; ++i) {
         let button = noteButtons[i];
         
-        //button.innerHTML = i + 1;
+        let index = i + 1;
+        button.innerHTML = index;
 
-        button.addEventListener("click", () => { onNoteButtonClick(button.dataset.note-text, button); }
+        console.log("Found note: " + button.dataset.noteText);
+        button.addEventListener("click", () => { onNoteButtonClick(button.dataset.noteText, button, index); }
     );
     };
 }
@@ -55,5 +72,6 @@ const header = document.querySelector('header h1');
 const article = document.querySelector('article');
 const postButtonContainer = document.querySelector('aside');
 const postButtons = document.querySelectorAll('li');
+const clickedNoteIndices = [];
 
 main();
