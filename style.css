@@ -129,13 +129,22 @@ article h1 {
     font-size: 6rem;
 }
 
-article h2 {
-
+article em {
+    font-style: normal;
+    font-family: Playfair-Italic;
 }
 
 article blockquote {
     padding-left: 2.5ch;
-    margin-left: 1.5ch;
+    margin-left: 2.5ch;
+    margin-right: 0;
+    border-left: 1px solid lightgrey;
+    font-size: 1rem;
+}
+
+article ol {
+    padding-left: 4ch;
+    margin-left: 2.5ch;
     margin-right: 0;
     border-left: 1px solid lightgrey;
     font-size: 1rem;
@@ -145,6 +154,9 @@ article p::before {
     width: 0;
 }
 
+article p, article ol, article ul {
+    line-height: 1.7rem;
+}
 
 article p {
     text-indent: 0;
@@ -153,6 +165,26 @@ article p {
     padding: 0;
     line-height: 1.7rem;
 }
+
+article hr {
+    height: 1px;
+    margin-left: 2.5ch;
+    margin-right: 2.5ch;
+    background-color: lightgrey;
+    border: none;
+}
+
+/*
+article .note {
+    transform: translate(0px, 0.5);
+    vertical-align: super;
+    text-align: center;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    font-size: 0.5rem;
+}
+*/
 
 .clazz article p::before {
     content: "";
@@ -171,12 +203,24 @@ article e, article a {
 
 article a {
     text-decoration: none;
-    background-color: CornflowerBlue;
-    transition: all 0.1s;
+    background-color: black;
+    transition: all 0.2s;
 }
 
 article a:hover {
     border-bottom: 0.2rem solid CornflowerBlue;
-    color: CornflowerBlue;
+    color: black;
     background-color: white;
+}
+
+.post-script {
+    font-family: Playfair-Italic;
+    font-size: 0.75rem;
+    margin 1rem 0rem;
+}
+
+.date-script {
+    font-size: 0.75rem;
+    color: lightgrey;
+    text-align: right;
 }

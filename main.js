@@ -25,10 +25,23 @@ function onPostButtonClick(title) {
     request.send();
 }
 
+function onNoteButtonClick(text, button) {
+    
+}
+
 function onPostLoad() {
     console.log("Loaded!");
     article.innerHTML = this.responseText;
     article.classList.remove('invisible');
+    let noteButtons = document.querySelectorAll('.note');
+    for(let i = 0; i < noteButtons.length; ++i) {
+        let button = noteButtons[i];
+        
+        //button.innerHTML = i + 1;
+
+        button.addEventListener("click", () => { onNoteButtonClick(button.dataset.note-text, button); }
+    );
+    };
 }
 
 function main() {
