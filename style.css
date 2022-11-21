@@ -86,6 +86,7 @@ header h6 {
 }
 
 aside.initial {
+    transition: all 0s;
     transform: translate(16ch, 0);
     box-shadow: none;
 }
