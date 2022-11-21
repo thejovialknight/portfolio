@@ -325,6 +325,10 @@ article a:hover {
         padding: 1rem 1rem;
     }
 
+    article h1 {
+        font-size: 3rem;
+    }
+
     article.invisible {
         transform: translate(0, 0);
     }
