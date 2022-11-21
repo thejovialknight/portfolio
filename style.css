@@ -298,7 +298,6 @@ article a:hover {
 
 .post-script {
     font-family: Playfair-Italic;
-    font-size: 0.75rem;
     margin 1rem 0rem;
 }
 
@@ -309,6 +308,8 @@ article a:hover {
 }
 
 @media (max-width: 1280px) {
+    font-size: 36px;
+
     body {
         grid-template-columns: 1fr;
         grid-template-rows: 4rem fit-content fit-content;
