@@ -29,19 +29,23 @@
     }
 }
 
+
+
+/*
 @media (max-width: 1280px) {
     :root {
         font-size: 16px;
     }
 }
+*/
 
 body {
     display: grid;
     grid-template-columns: 1fr minmax(max-content, 25ch) 60ch 1fr;
     grid-template-rows: 4rem 1fr;
-
-    /* font-family: "Times New Roman", serif; */
-    /* font-family: "Caslon", sans-serif; */
+    grid-template-areas: 
+        "head head  head    head"
+        ".    aside article .   ";
     font-weight: 100;
 
     margin: 0;
@@ -53,9 +57,11 @@ h1, p, h2 {
 }
 
 header {
+    /*
     grid-row: 1;
     grid-column: 1 / 5;
-    /* box-shadow: 0rem 1rem 1rem -1.5rem var(--shadow); */
+    */
+    grid-area: head;
     border-bottom: 1px solid var(--middle);
     align-self: center;
     padding: 1rem;
@@ -86,8 +92,11 @@ aside.initial {
 
 aside {
     transition: all 1.2s;
+    /*
     grid-row: 2;
     grid-column: 2;
+    */
+    grid-area: aside;
     place-self: start;
 
     padding: 1rem;
@@ -128,8 +137,11 @@ article.invisible {
 }
 
 article {
+    /*
     grid-row: 2;
     grid-column: 3;
+    */
+    grid-area: article;
     padding: 1rem 2rem;
     padding-left: 0;
     opacity: 1.0;
@@ -222,7 +234,9 @@ article .note-text {
     font-style: italic;
     display: block;
     animation-name: note-appear;
-    animation-duration: 5s;
+    animation-duration: 2s;
+    overflow: hidden;
+    font-size: 1rem;
 }
 
 article .note-index{
@@ -231,7 +245,7 @@ article .note-index{
     font-weight: bold;
     font-size: 0.75rem;
     animation-name: note-appear;
-    animation-duration: 5s;
+    animation-duration: 2s;
     animation-timing-function: ease-in;
 }
 
@@ -292,4 +306,56 @@ article a:hover {
     font-size: 0.75rem;
     color: var(--middle);
     text-align: right;
+}
+
+@media (max-width: 1280px) {
+    body {
+        grid-template-columns: 1fr;
+        grid-template-rows: 4rem fit-content fit-content;
+        grid-template-areas:
+            "head"
+            "aside"
+            "article";
+    }
+
+    article {
+        padding: 1rem 2rem;
+    }
+
+    article.invisible {
+        transform: translate(0, 0);
+    }
+
+    aside.initial {
+        transform: translate(0, 0);
+    }
+
+    aside {
+        place-self: center;
+        box-shadow: 0rem 1rem 1rem -1.5rem var(--shadow);
+    }
+
+    aside ul {
+        padding: 0;
+    }
+
+    aside li {
+        text-align: center;
+    }
+
+    aside a {
+        text-align: center;
+    }
+
+    aside li:hover, aside li.selected {
+        transform: translate(0px, -0.25rem);
+    }
+
+    article .note {
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 1rem;
+        line-height: 1rem;
+        vertical-align: center;
+    }
 }
