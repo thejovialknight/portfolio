@@ -308,7 +308,9 @@ article a:hover {
 }
 
 @media (max-width: 1280px) {
-    font-size: 36px;
+    root: {
+        font-size: 36px;
+    }
 
     body {
         grid-template-columns: 1fr;
