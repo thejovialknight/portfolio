@@ -308,7 +308,7 @@ article a:hover {
 }
 
 @media (max-width: 1280px) {
-    root: {
+    :root {
         font-size: 36px;
     }
 
