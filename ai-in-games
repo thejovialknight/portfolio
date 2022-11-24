@@ -3,3 +3,9 @@
 <p>The idea of applying machine learning technology to game systems is intriguing, but carries with it a coincident sense of peculiarity. When I think about it, at least, the impression these sorts of projects impart is that of a toy or Warhol-esque experimentation. Though the possible applications unimaginably immense, it feels as if it may prove difficult to wrangle the technology in a way that feels <em>right</em> in some abstract sense.</p>
 <p>-- different levels that are better and worse, might be worth just listing out different exciting use cases and their downsides.</p>
 <p>dialogue, story generation, visual and auditory content both offline and online, metatextuality, in game ai</p>
+<h3>Audiovisual supplements</h3>
+<p>The production of most games requires a massive amount of both visual and auditory work, which has increasingly been a bottleneck on game content generation. Perhaps the most innocuous usage of AI in games is to fill out that content <em>which does not in any way alter or interact with the formal structure of the game system itself.</em></p>
+<h3>Content generation</h3>
+<p>When designers start dabbling in using AI technology for procedural generation of content which contains <em>meaning to the story</em>, things start getting a little hairy.</p>
+<h3>As a core mechanic</h3>
+<p>There's not necessarily a hard definition distinguishing this category from the previous, but of course, a quantitative factor can become qualitative if the range is wide enough.</p>
