@@ -1,0 +1,119 @@
+<h1>Programming Snake</h1>
+<h2>When low level fits the job description</h2>
+<p>I'm trying to get into the habit of dedicated practice in coding. My current project is an implementation of the game Snake written in C. I'm beginning to grow a tenuous familiarity with C++, but wanted to test myself and see what the workflow is like in this comparitively low level language. I've been getting very into the Mike Acton, Casey Muratori brand of pragmatic coding philosophy, and C seems like the most appropriate mainstream language for implementing these ideas.</p>
+<p>I decided for this project to be as dogmatic as possible about resisting the urge to do any more clever engineering than is strictly necessary to complete the task at hand. Implementing a simple game who's rules are already clearly defined makes this task easier than it would be in a "real" project. It almost feels like cheating, but baby steps are important. Perhaps I'll try to design my own simple game for the next practice project.</p>
+<p>As I was saying, the task at hand is to create Snake, and my plan was to take the shortest and most obvious path possible at each point in the coding process, and introduce measures to reduce redundancy <em>only as they actually occur in code</em>. It's very hard to resist the urge to guess what will need to be engineered for in advance, but the benefit of this approach is that the code ends up organically designed around the <em>actual problem</em> rather than a theoretical problem concocted by the programmer.</p>
+<p>To get started, I created a simple game loop.</p>
+<pre>
+<code>
+int main() {
+	struct Platform platform = init_platform();
+	struct Game game;
+	game.tick = 0;
+
+	int pixel_count = platform.win_w * platform.win_h;
+	struct Color *colors = (struct Color*)malloc(pixel_count * sizeof(struct Color)) ;
+
+	bool quit = false;
+	while(!quit) {
+		struct PlatformInput input = input_from_platform();
+		update_and_render(&game, input, &colors[0], pixel_count);
+		render_to_platform(colors, &platform);
+		quit = input.quit;
+	}
+	return 0;
+}
+</code>
+</pre>
+<p>The connections between code modules in main represent the only premeditated engineering I allowed myself. In particular, I created a structure called Platform which wraps functionality from the SDL library I use for windowing and drawing pixels to the screen. This seemed to be an abstraction that was unimportant to the overall structure of the code. <code>update_and_render</code> takes an array of colors that it populates within the game logic, and <code>render_to_platform</code> simply iterates through that array to draw pixels using SDL.</p>
+<p>Note to those familiar with coding in C, I'm clearly far from writing in an idiomatic style here. I'm trying to crank out a program, and my philosophy is that through continuing to engineer projects, familiarity with the syntax and underlying reasons for writing code in a certain way will become ever clearer.</p>
+<p>So we have a loop that takes input (using SDL under the hood), updates the game state using that input while simultaneously performing rendering logic, and draws the pixels defined by that rendering logic to the platform layer. All the interesting bits of our code are therefore found in <code>update_and_render</code>, so let's take a look at that.</p>
+<pre>
+<code>
+void update_and_render(struct Game *game, struct PlatformInput input, struct Color *out_colors, int pixel_count) {
+	game->tick += 0.06;
+	if(game->tick >= 0.98) { game->tick = 0; }
+	for(int i = 0; i < pixel_count; ++i) {
+		struct Color color = {game->tick, game->tick, game->tick};
+		out_colors[i] = color; 
+	}
+}
+</code>
+</pre>
+<p>Well, not much to see here as of yet, just testing out the system by drawing a solid screen full of color which changes over time. It works.</p>
+<p>First, we'll try rendering a grid of tiles for the snake to crawl around on.</p>
+<pre>
+<code>
+// Tile settings
+double tile_gap = 8; 
+double tile_size = 48;
+
+// Calculate grid position
+double left_edge = ((double)platform->win_w / 2) - (((double)COLUMNS / 2) * tile_size) - (((double)COLUMNS / 2) * tile_gap);
+double top_edge = ((double)platform->win_h / 2) - (((double)ROWS / 2) * tile_size) - (((double)ROWS / 2) * tile_gap);
+struct Color color = {0.5, 0.5, 0.5};
+
+// Draw tiles
+for(int y = 0; y < ROWS; ++y) {
+	for(int x = 0; x < COLUMNS; ++x) {
+		// Calculate tile rect
+		int rx = left_edge + (x * tile_size) + (x * tile_gap);
+		int ry = top_edge + (y * tile_size) + (y * tile_gap);
+		int rw = tile_size;
+		int rh = tile_size;
+
+		// Draw rect
+		for(int y = ry; y < ry + rh; ++y) {
+			for(int x = rx; x < rx + rw; ++x) {
+				draw_pixel(platform, color, x, y); 
+			}
+		}
+	}
+}
+</code>
+</pre>
+<p>I define some parameters like the tile_gap and tile_size, and then use those parameters along with the size of the screen and the dimensions of the grid to calculate the position and size of each tile. Then I do another set of nested for loops to draw a rectangle using those calculated positions. This does the job, and we now have a grid of tiles centered on the screen.</p>
+<p>I started on the game logic by defining a timer that counts down and seperates the game into a discrete series of "steps" that simulate the snake moving.</p>
+<pre>
+<code>
+// Tick timer
+game->time_to_next_step -= delta_time;
+if(game->time_to_next_step <= 0) {
+	game->time_to_next_step = game->step_length;
+	step(game);
+}
+</code>
+</pre>
+<p>The game state has a timer that counts down every frame until it reaches 0, at which point a step is simulated and the timer resets. <code>update_and_render</code> uses a newly passed in delta_time parameter (calculated in <code>main</code>) to determine how much the timer should count down every frame.</p>
+<p>Next I wrote some logic for interpreting input from the player. This verbose code uses data about the previous frame's input to determine whether the player has just pressed one of the WASD keys. It also prevents the player from inputting a direction that is directly opposite of their current direction.</p>
+<pre>
+<code>
+if(input->w == true && game->previous_input.w == false && 
+	game->direction.y != 1)
+{
+	game->next_move.x = 0;
+	game->next_move.y = 1;
+	game->next_move.y = -1;
+}
+if(input->a == true && game->previous_input.a == false &&
+	game->direction.x != 1)
+{
+	game->next_move.x = -1;
+	game->next_move.y = 0;
+}
+if(input->s == true && game->previous_input.s == false &&
+	game->direction.y != -1)
+{
+	game->next_move.x = 0;
+	game->next_move.y = -1;
+	game->next_move.y = 1;
+}
+if(input->d == true && game->previous_input.d == false &&
+	game->direction.x != -1)
+{
+	game->next_move.x = 1;
+	game->next_move.y = 0;
+}
+</code>
+</pre>
+<p>The effect of this code is that the player can press as many buttons as they want between frames, and only the last key down they perform is the direction the snake moves in. Note that <code>next_move</code> is what is being set and will be used to determine where the snake moves when the next step occurs, and <code>direction</code> is used to store the direction the snake moved in on the previous step. We need to store the previous movement in order to stop the player from turning around completely in one step, which is against the rules of snake.</p>
