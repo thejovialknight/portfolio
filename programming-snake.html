@@ -12,7 +12,7 @@ int main() {
 	game.tick = 0;
 
 	int pixel_count = platform.win_w * platform.win_h;
-	struct Color *colors = (struct Color*)malloc(pixel_count * sizeof(struct Color)) ;
+	struct Color *colors = (struct Color*)malloc(pixel_count * sizeof(struct Color));
 
 	bool quit = false;
 	while(!quit) {
@@ -72,8 +72,30 @@ for(int y = 0; y < ROWS; ++y) {
 }
 </code>
 </pre>
-<p>I define some parameters like the tile_gap and tile_size, and then use those parameters along with the size of the screen and the dimensions of the grid to calculate the position and size of each tile. Then I do another set of nested for loops to draw a rectangle using those calculated positions. This does the job, and we now have a grid of tiles centered on the screen.</p>
-<p>I started on the game logic by defining a timer that counts down and seperates the game into a discrete series of "steps" that simulate the snake moving.</p>
+<p>I define some parameters like the tile_gap and tile_size, and then use those parameters along with the size of the screen and the dimensions of the grid to calculate the position and size of each cell. Then I do another set of nested for loops to draw a rectangle using those calculated positions. This does the job, and we now have a grid of cells centered on the screen.</p>
+<p>Next I wrote some logic for interpreting input from the player. This verbose code uses data about the previous frame's input to determine whether the player has just pressed one of the WASD keys. It also prevents the player from inputting a direction that is directly opposite of their current direction.</p>
+<pre>
+<code>
+if(input->w == true && game->previous_input.w == false && game->direction.y != 1) {
+	game->next_move.x = 0;
+	game->next_move.y = -1;
+}
+if(input->a == true && game->previous_input.a == false && game->direction.x != 1) {
+	game->next_move.x = -1;
+	game->next_move.y = 0;
+}
+if(input->s == true && game->previous_input.s == false && game->direction.y != -1) {
+	game->next_move.x = 0;
+	game->next_move.y = 1;
+}
+if(input->d == true && game->previous_input.d == false && game->direction.x != -1) {
+	game->next_move.x = 1;
+	game->next_move.y = 0;
+}
+</code>
+</pre>
+<p>The effect of this code is that the player can press as many buttons as they want between frames, and only the last key down they perform is the direction the snake moves in. Note that <code>next_move</code> is what is being set and will be used to determine where the snake moves when the next step occurs, and <code>direction</code> is used to store the direction the snake moved in on the previous step. We need to store the previous movement in order to stop the player from turning around completely in one step, which is against the rules of snake.</p>
+<p>Now I define a timer that counts down and separates the game into a discrete series of "steps" that simulate the snake moving.</p>
 <pre>
 <code>
 // Tick timer
@@ -84,36 +106,157 @@ if(game->time_to_next_step <= 0) {
 }
 </code>
 </pre>
-<p>The game state has a timer that counts down every frame until it reaches 0, at which point a step is simulated and the timer resets. <code>update_and_render</code> uses a newly passed in delta_time parameter (calculated in <code>main</code>) to determine how much the timer should count down every frame.</p>
-<p>Next I wrote some logic for interpreting input from the player. This verbose code uses data about the previous frame's input to determine whether the player has just pressed one of the WASD keys. It also prevents the player from inputting a direction that is directly opposite of their current direction.</p>
+<p>The timer counts down every frame until it reaches 0, at which point a step is simulated and the timer resets. <code>update_and_render</code> uses a newly passed in delta_time parameter (calculated in <code>main</code>) to determine how much the timer should count down every frame. The <code>step</code> function within this if statement will contain the logic for simulating one of these discrete steps.</p>
+<p>At this point we have our own little game loop in <code>update_and_render</code> that first takes input, then checks whether a step is to be performed, and then renders a grid of cells to the screen. Here is our current progress all put together.</p>
 <pre>
 <code>
-if(input->w == true && game->previous_input.w == false && 
-	game->direction.y != 1)
-{
+// INPUT
+if(input->w == true && game->previous_input.w == false && game->direction.y != 1) {
 	game->next_move.x = 0;
-	game->next_move.y = 1;
 	game->next_move.y = -1;
 }
-if(input->a == true && game->previous_input.a == false &&
-	game->direction.x != 1)
-{
+if(input->a == true && game->previous_input.a == false && game->direction.x != 1) {
 	game->next_move.x = -1;
 	game->next_move.y = 0;
 }
-if(input->s == true && game->previous_input.s == false &&
-	game->direction.y != -1)
-{
+if(input->s == true && game->previous_input.s == false && game->direction.y != -1) {
 	game->next_move.x = 0;
-	game->next_move.y = -1;
 	game->next_move.y = 1;
 }
-if(input->d == true && game->previous_input.d == false &&
-	game->direction.x != -1)
-{
+if(input->d == true && game->previous_input.d == false && game->direction.x != -1) {
 	game->next_move.x = 1;
 	game->next_move.y = 0;
 }
+
+// LOGIC
+// Tick timer
+game->time_to_next_step -= delta_time;
+if(game->time_to_next_step <= 0) {
+	game->time_to_next_step = game->step_length;
+	step(game);
+}
+
+// RENDER
+// Tile settings
+double tile_gap = 8; 
+double tile_size = 48;
+
+// Calculate grid position
+double left_edge = ((double)platform->win_w / 2) - (((double)COLUMNS / 2) * tile_size) - (((double)COLUMNS / 2) * tile_gap);
+double top_edge = ((double)platform->win_h / 2) - (((double)ROWS / 2) * tile_size) - (((double)ROWS / 2) * tile_gap);
+struct Color color = {0.5, 0.5, 0.5};
+
+// Draw tiles
+for(int y = 0; y < ROWS; ++y) {
+	for(int x = 0; x < COLUMNS; ++x) {
+		// Calculate tile rect
+		int rx = left_edge + (x * tile_size) + (x * tile_gap);
+		int ry = top_edge + (y * tile_size) + (y * tile_gap);
+		int rw = tile_size;
+		int rh = tile_size;
+
+		// Draw rect
+		for(int y = ry; y < ry + rh; ++y) {
+			for(int x = rx; x < rx + rw; ++x) {
+				draw_pixel(platform, color, x, y); 
+			}
+		}
+	}
+}
 </code>
 </pre>
-<p>The effect of this code is that the player can press as many buttons as they want between frames, and only the last key down they perform is the direction the snake moves in. Note that <code>next_move</code> is what is being set and will be used to determine where the snake moves when the next step occurs, and <code>direction</code> is used to store the direction the snake moved in on the previous step. We need to store the previous movement in order to stop the player from turning around completely in one step, which is against the rules of snake.</p>
+<p>Now it's time to work on <code>step</code>. I calculate the new position of the head of the snake based on the current direction, which now gets set from <code>next_move</code>.</p>
+<pre>
+<code>
+game->direction = game->next_move;
+struct Coordinate new_snake_head;
+struct Coordinate *snake_head = &game->snake[0];
+new_snake_head.x = snake_head->x + game->direction.x;
+new_snake_head.y = snake_head->y + game->direction.y;
+</code>
+</pre>
+<p>The snake is represented in the game state simply as an array of coordinates, with the head of the snake at 0, and the current length of the snake represented as an integer. We add our direction to the current position of the snake's head to get our new position.</p>
+<p>There's a couple things we want to check now to determine whether the player has lost the game. The first is whether the new snake position is out of bounds of the grid.</p>
+<pre>
+<code>
+// Check if new position is out of bounds
+if(new_snake_head.x < 0 ||
+   new_snake_head.x >= COLUMNS ||
+   new_snake_head.y < 0 ||
+   new_snake_head.y >= ROWS)
+{
+	start_game(game);
+	return;
+}
+</code>
+</pre>
+<p><code>start_game</code> is a function that initializes the starting game state. It's called when the game first starts and whenever the player dies.</p>
+<p>The other death condition to check for is the snake running into itself.</p>
+<pre>
+<code>
+// Check if new position hits the snake
+for(int i = 0; i < game->snake_length; ++i) {
+	if(new_snake_head.x == game->snake[i].x && new_snake_head.y == game->snake[i].y) {
+		start_game(game);
+		return;
+	}
+}
+</code>
+</pre>
+<p>We check whether the new head position equals the position of any of the other snake coordinates, and restart the game if so.</p>
+<p>Now we are going to actually move the snake. We do this by shifting all of the coordinates in the array to the right, then we set the head of the array to the new head position. The effect of this is the position that was previously the head becoming the position at index 1. The old tail of the snake disappears, because our stored snake length will determine how much of the array is rendered. The new tail is now what was previously directly before the old tail.</p>
+<p>The last thing to do is check if the player hit a food cell. The reason we do this after moving the snake is because picking up a food will modify the length of the snake. The for loop which iterates the snake positions is dependent on that length.</p>
+<pre>
+<code>
+// Check if new position is a food
+// Must happen after move or else snake length changes iteration
+if(snake_head->x == game->food.x && snake_head->y == game->food.y) {
+	game->snake_length++;
+
+	// Move food
+	if(game->food.x != 11) {
+		game->food.x = 11;
+		game->food.y = 13;
+	}
+	else {
+		game->food.x = 4;
+		game->food.y = 4;
+	}
+}
+</code>
+</pre>
+<p>As you can see, all we need to do to make the snake longer is iterate the snake length, and the old tail effectively regains its status as the new tail. I haven't yet implemented random food locations, so I just hardcode the food to toggle between two different positions every time it's eaten.</p>
+<p>Alright, we've coded a lot of logic. Now we need a way to render all of it. As of now we are only drawing a grid of cells that is completely unaware of the snake or food positions, so let's get those drawn. Ah, but wait! We now have a redunancy to deal with, which is the rendering of cells. We factor the code out of the for loops used to draw the grid into a new function called <code>draw_cell</code>.</p>
+<pre>
+<code>
+void draw_cell(struct Platform *platform, struct Color color, int x, int y) {
+	double tile_gap = 8; 
+	double tile_size = 32;
+	double left_edge = ((double)platform->win_w / 2) - (((double)COLUMNS / 2) * tile_size) - (((double)COLUMNS / 2) * tile_gap);
+	double top_edge = ((double)platform->win_h / 2) - (((double)ROWS / 2) * tile_size) - (((double)ROWS / 2) * tile_gap);
+	int rx = left_edge + (x * tile_size) + (x * tile_gap);
+	int ry = top_edge + (y * tile_size) + (y * tile_gap);
+	int rw = tile_size;
+	int rh = tile_size;
+	for(int y = ry; y < ry + rh; ++y) {
+		for(int x = rx; x < rx + rw; ++x) {
+			draw_pixel(platform, color, x, y); 
+		}
+	}
+}
+</code>
+</pre>
+<p>We are recalculating the left and top edge positions of the grid uneccessarily for every cell this way, which I'll refactor a bit later. Our grid drawing loops now look like this.</p>
+<pre>
+<code>
+// Draw tiles
+struct Color color = {0.5, 0.5, 0.5};
+for(int y = 0; y < ROWS; ++y) {
+	for(int x = 0; x < COLUMNS; ++x) {
+		draw_cell(platform, color, x, y);
+	}
+}
+</code>
+</pre>
+<p>Note that it took us a fair bit of time to get to the point where we needed to do any refactoring of this kind at all. I think we tend to assume that a lot more of our code is factorable into reusable chunks than actually fits our problem definition. By doing things this way, I save time by not having to think in advance of the issues I have, and refactoring code in this manner is a relatively easy affair.</p>
+<p>Even when things get more complicated, I believe this logic holds. Refactoring is a larger task in these more complicated situations, but so is the cost of coming up with an abstraction based on a faulty assumption about the way the code should be. In my experience, coming up with correct assumptions about these things is very difficult, and the more we lock things down in advance, the harder it becomes to see what the structure of the problem definition actually is.</p>
